@@ -1,11 +1,13 @@
 class Spree::StaticContentController < Spree::StoreController
   rescue_from ActiveRecord::RecordNotFound, :with => :render_404
 
+  require 'cgi'
+
   helper 'spree/products'
   layout :determine_layout
 
   def show
-    @page = Spree::Page.visible.find_by_slug!(request.path)
+    @page = Spree::Page.visible.find_by_slug!(CGI.unescape(request.path))
   end
 
   private
